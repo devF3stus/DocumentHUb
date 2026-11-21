@@ -1,0 +1,38 @@
+name: PR Code Compare & Checks
+
+# Runs when YOU initiate a Pull Request on GitHub targeting main,
+# or when code is pushed to main. It never auto-creates or auto-merges PRs.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  compare-and-verify:
+    name: Compare Changes & Basic Safety Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Show changed files in Pull Request
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "Comparing PR branch against base branch (${{ github.base_ref }})..."
+          git diff --stat "origin/${{ github.base_ref }}...HEAD"
+
+      - name: Check that no .env secret files are tracked
+        run: |
+          if git ls-files | grep -E '(^|/)\.env($|\.)' | grep -v '\.env\.example$'; then
+            echo "ERROR: A .env file is tracked in Git! Remove it before merging."
+            exit 1
+          fi
+          echo "No .env secret files are tracked."
