@@ -46,4 +46,4 @@
 
 ## 7. Concepts & Quiz Score
 - **Phase 1 Learning Quiz:** `3 / 5` (understood `.env` vs `.env.example` and Docker fundamentals; reviewed `.venv` isolation, CORS origin rules, and HTTP status codes).
-- **Phase 1 Implementation Quiz:** Pending user submission.
+- **Phase 1 Implementation Quiz:** `1 / 4` (understood `NEXT_PUBLIC_` exposure; reviewed Docker non-root user / least privilege, backend `CORS_ORIGINS` in production, and feature-branch PR workflow).
