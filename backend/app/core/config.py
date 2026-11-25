@@ -5,9 +5,19 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables or .env file."""
 
     app_name: str = "DocumentHub API"
-    app_version: str = "0.1.0"
+    app_version: str = "0.2.0"
     environment: str = "development"
     cors_origins: str = "http://localhost:3000"
+
+    # Upload security limits
+    max_upload_size_mb: int = 20
+
+    # Supabase (optional in local guest-only/test mode)
+    supabase_url: str = ""
+    supabase_anon_key: str = ""
+    supabase_service_role_key: str = ""
+    supabase_storage_bucket: str = "documents"
+    signed_url_expiry_seconds: int = 60
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -18,6 +28,16 @@ class Settings(BaseSettings):
     def get_cors_origins_list(self) -> list[str]:
         """Parse comma-separated CORS origins into a clean list."""
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+
+    @property
+    def max_upload_size_bytes(self) -> int:
+        """Return maximum allowed upload size in bytes."""
+        return self.max_upload_size_mb * 1024 * 1024
+
+    @property
+    def supabase_configured(self) -> bool:
+        """Return True when Supabase URL and service key are provided."""
+        return bool(self.supabase_url.strip() and self.supabase_service_role_key.strip())
 
 
 settings = Settings()

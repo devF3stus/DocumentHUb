@@ -1,12 +1,23 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ChangeEvent } from "react";
+import { getSupabaseBrowserClient } from "@/lib/supabase";
 
 interface HealthResponse {
   status: string;
   service: string;
   version: string;
   environment: string;
+}
+
+interface UploadValidationResponse {
+  valid: boolean;
+  safe_filename: string;
+  display_filename: string;
+  extension: string;
+  mime_type: string;
+  size_bytes: number;
+  user_mode: string;
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -21,24 +32,30 @@ async function fetchBackendHealth(): Promise<HealthResponse> {
 
 export default function Home() {
   const [health, setHealth] = useState<HealthResponse | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [healthError, setHealthError] = useState<string | null>(null);
+  const [healthLoading, setHealthLoading] = useState<boolean>(true);
+
+  const [uploading, setUploading] = useState<boolean>(false);
+  const [uploadResult, setUploadResult] = useState<UploadValidationResponse | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const supabaseConfigured = Boolean(getSupabaseBrowserClient());
 
   const handleRecheck = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+    setHealthLoading(true);
+    setHealthError(null);
     try {
       const data = await fetchBackendHealth();
       setHealth(data);
     } catch (err) {
       setHealth(null);
-      setError(
+      setHealthError(
         err instanceof Error
           ? err.message
           : "Unable to reach the FastAPI backend."
       );
     } finally {
-      setLoading(false);
+      setHealthLoading(false);
     }
   }, []);
 
@@ -48,13 +65,13 @@ export default function Home() {
       .then((data) => {
         if (!cancelled) {
           setHealth(data);
-          setError(null);
+          setHealthError(null);
         }
       })
       .catch((err) => {
         if (!cancelled) {
           setHealth(null);
-          setError(
+          setHealthError(
             err instanceof Error
               ? err.message
               : "Unable to reach the FastAPI backend."
@@ -63,7 +80,7 @@ export default function Home() {
       })
       .finally(() => {
         if (!cancelled) {
-          setLoading(false);
+          setHealthLoading(false);
         }
       });
 
@@ -72,28 +89,54 @@ export default function Home() {
     };
   }, []);
 
+  const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (!selectedFile) return;
+
+    setUploading(true);
+    setUploadResult(null);
+    setUploadError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      const res = await fetch(`${API_URL}/api/v1/uploads/validate`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const body = await res.json();
+      if (!res.ok) {
+        throw new Error(body.detail ?? `Upload rejected (HTTP ${res.status})`);
+      }
+
+      setUploadResult(body as UploadValidationResponse);
+    } catch (err) {
+      setUploadError(
+        err instanceof Error ? err.message : "Upload validation failed."
+      );
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-6">
-      <div className="max-w-xl w-full rounded-2xl border border-slate-800 bg-slate-900/70 p-8 shadow-xl">
-        <div className="flex items-center justify-between gap-4 mb-6">
+      <div className="max-w-xl w-full space-y-5 rounded-2xl border border-slate-800 bg-slate-900/70 p-8 shadow-xl">
+        <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-sky-400">
-              Phase 1 Foundation
+              Phase 2: Auth &amp; Upload Security
             </p>
             <h1 className="text-3xl font-bold tracking-tight mt-1">
               DocumentHub
             </h1>
           </div>
           <span className="rounded-full border border-slate-700 bg-slate-800 px-3 py-1 text-xs text-slate-300">
-            Free &amp; Privacy-First
+            {supabaseConfigured ? "Auth Ready" : "Guest Mode"}
           </span>
         </div>
-
-        <p className="text-slate-300 text-sm leading-relaxed mb-6">
-          Intelligent, browser-based document processing platform combining
-          traditional PDF/Word tools, OCR, and an optional independent AI
-          assistant.
-        </p>
 
         <section className="rounded-xl border border-slate-800 bg-slate-950/70 p-5">
           <div className="flex items-center justify-between mb-3">
@@ -109,13 +152,13 @@ export default function Home() {
             </button>
           </div>
 
-          {loading && (
+          {healthLoading && (
             <p className="text-sm text-slate-400">
               Checking {API_URL}/health...
             </p>
           )}
 
-          {!loading && health && (
+          {!healthLoading && health && (
             <div className="space-y-1 text-sm">
               <p className="text-emerald-400 font-medium">
                 Connected ({health.status.toUpperCase()})
@@ -127,10 +170,52 @@ export default function Home() {
             </div>
           )}
 
-          {!loading && error && (
+          {!healthLoading && healthError && (
             <div className="space-y-1 text-sm">
               <p className="text-amber-400 font-medium">Backend Offline</p>
-              <p className="text-slate-400">{error}</p>
+              <p className="text-slate-400">{healthError}</p>
+            </div>
+          )}
+        </section>
+
+        <section className="rounded-xl border border-slate-800 bg-slate-950/70 p-5 space-y-3">
+          <h2 className="text-sm font-semibold text-slate-200">
+            Secure File Upload Validator
+          </h2>
+          <p className="text-xs text-slate-400">
+            Tests server-side extension, MIME, size, and magic-byte validation
+            (.pdf, .docx, .png, .jpg, .txt).
+          </p>
+          <input
+            type="file"
+            accept=".pdf,.docx,.png,.jpg,.jpeg,.txt"
+            onChange={handleFileUpload}
+            disabled={uploading}
+            className="block w-full text-xs text-slate-300 file:mr-4 file:rounded-lg file:border-0 file:bg-slate-800 file:px-3 file:py-2 file:text-xs file:font-medium file:text-slate-200 hover:file:bg-slate-700"
+          />
+
+          {uploading && (
+            <p className="text-xs text-sky-400">Validating file signature...</p>
+          )}
+
+          {uploadResult && (
+            <div className="rounded-lg border border-emerald-900/60 bg-emerald-950/30 p-3 text-xs space-y-1">
+              <p className="font-semibold text-emerald-400">
+                Upload Validated ({uploadResult.user_mode})
+              </p>
+              <p className="text-slate-300">
+                Original: {uploadResult.display_filename} &rarr; Safe ID:{" "}
+                <code>{uploadResult.safe_filename}</code>
+              </p>
+              <p className="text-slate-400">
+                {uploadResult.mime_type} &middot; {uploadResult.size_bytes} bytes
+              </p>
+            </div>
+          )}
+
+          {uploadError && (
+            <div className="rounded-lg border border-rose-900/60 bg-rose-950/30 p-3 text-xs text-rose-300">
+              Rejected: {uploadError}
             </div>
           )}
         </section>

@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.v1.uploads import router as v1_uploads_router
 from app.core.config import settings
 
 app = FastAPI(
@@ -17,6 +18,8 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
+
+app.include_router(v1_uploads_router)
 
 
 @app.get("/health", tags=["System"])
