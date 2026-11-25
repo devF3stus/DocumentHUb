@@ -34,4 +34,4 @@
 
 ## 5. Concepts & Quiz Score
 - **Phase 2 Learning Quiz:** `1.5 / 5` (initial) -> `3 / 3` (remedial check on UUID path traversal protection, RLS, and signed URLs).
-- **Phase 2 Implementation Quiz:** Pending user submission.
+- **Phase 2 Implementation Quiz:** `0.5 / 4` (reviewed streaming RAM protection, `finally:` cleanup, guest vs `401` invalid-token handling, and per-user storage folder RLS).
