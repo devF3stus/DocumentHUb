@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState, type ChangeEvent } from "react";
+import { PdfWorkspace } from "@/components/PdfWorkspace";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
 
 interface HealthResponse {
@@ -127,7 +128,7 @@ export default function Home() {
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-sky-400">
-              Phase 2: Auth &amp; Upload Security
+              Phase 3: Core PDF Engine
             </p>
             <h1 className="text-3xl font-bold tracking-tight mt-1">
               DocumentHub
@@ -219,6 +220,8 @@ export default function Home() {
             </div>
           )}
         </section>
+
+        <PdfWorkspace />
       </div>
     </main>
   );

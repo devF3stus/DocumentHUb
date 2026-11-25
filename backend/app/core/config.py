@@ -11,6 +11,7 @@ class Settings(BaseSettings):
 
     # Upload security limits
     max_upload_size_mb: int = 20
+    max_pdf_pages: int = 100
 
     # Supabase (optional in local guest-only/test mode)
     supabase_url: str = ""
