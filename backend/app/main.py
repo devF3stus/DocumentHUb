@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.v1.pdf import router as v1_pdf_router
 from app.api.v1.uploads import router as v1_uploads_router
 from app.core.config import settings
 
@@ -20,6 +21,7 @@ app.add_middleware(
 )
 
 app.include_router(v1_uploads_router)
+app.include_router(v1_pdf_router)
 
 
 @app.get("/health", tags=["System"])
