@@ -28,4 +28,4 @@
 
 ## 5. Concepts & Quiz Score
 - **Phase 4 Learning Quiz:** `3.75 / 4` (understood `.docx` ZIP signature, Phase 5 OCR boundary, `shell=False` command-injection prevention, and subprocess timeout).
-- **Phase 4 Implementation Quiz:** Pending user submission.
+- **Phase 4 Implementation Quiz:** `1 / 4` (understood magic-byte validation; reviewed `503` LibreOffice fallback vs Dockerfile, `setuptools<81` pin, and `isolated_temp_dir` cleanup).
