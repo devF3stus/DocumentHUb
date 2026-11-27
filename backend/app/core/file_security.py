@@ -49,6 +49,16 @@ ALLOWED_FILE_TYPES: dict[str, FileTypeRule] = {
         mime_types=("image/jpeg",),
         magic_prefixes=(b"\xff\xd8\xff",),
     ),
+    ".tiff": FileTypeRule(
+        extension=".tiff",
+        mime_types=("image/tiff",),
+        magic_prefixes=(b"II*\x00", b"MM\x00*"),
+    ),
+    ".tif": FileTypeRule(
+        extension=".tif",
+        mime_types=("image/tiff",),
+        magic_prefixes=(b"II*\x00", b"MM\x00*"),
+    ),
     ".txt": FileTypeRule(
         extension=".txt",
         mime_types=("text/plain",),

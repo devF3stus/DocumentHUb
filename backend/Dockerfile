@@ -6,10 +6,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# Install LibreOffice Writer (headless) for high-fidelity DOCX -> PDF conversion.
+# Install LibreOffice Writer (DOCX -> PDF) and Tesseract OCR (OCR Studio).
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libreoffice-writer \
     fonts-liberation \
+    tesseract-ocr \
+    tesseract-ocr-eng \
     && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user so the container never runs with root privileges.

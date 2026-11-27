@@ -11,5 +11,6 @@ setuptools<81
 mammoth==1.9.0
 Pillow>=11.3.0
 pdf2docx==0.5.8
+pytesseract==0.3.13
 pytest==8.3.4
 httpx==0.28.1
