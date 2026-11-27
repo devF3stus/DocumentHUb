@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState, type ChangeEvent } from "react";
 import { ConversionWorkspace } from "@/components/ConversionWorkspace";
+import { OcrWorkspace } from "@/components/OcrWorkspace";
 import { PdfWorkspace } from "@/components/PdfWorkspace";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
 
@@ -129,7 +130,7 @@ export default function Home() {
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-sky-400">
-              Phase 4: Conversion &amp; Word Studio
+              Phase 5: OCR Studio
             </p>
             <h1 className="text-3xl font-bold tracking-tight mt-1">
               DocumentHub
@@ -225,6 +226,8 @@ export default function Home() {
         <PdfWorkspace />
 
         <ConversionWorkspace />
+
+        <OcrWorkspace />
       </div>
     </main>
   );
