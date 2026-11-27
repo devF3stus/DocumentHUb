@@ -5,5 +5,11 @@ python-multipart==0.0.20
 supabase==2.11.0
 pypdf[crypto]==5.1.0
 PyMuPDF==1.25.3
+python-docx==1.1.2
+docxcompose==1.4.0
+setuptools<81
+mammoth==1.9.0
+Pillow>=11.3.0
+pdf2docx==0.5.8
 pytest==8.3.4
 httpx==0.28.1
