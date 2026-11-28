@@ -6,6 +6,7 @@ from app.api.v1.convert import router as v1_convert_router
 from app.api.v1.ocr import router as v1_ocr_router
 from app.api.v1.pdf import router as v1_pdf_router
 from app.api.v1.uploads import router as v1_uploads_router
+from app.api.v1.workflows import router as v1_workflows_router
 from app.core.config import settings
 
 app = FastAPI(
@@ -28,6 +29,7 @@ app.include_router(v1_pdf_router)
 app.include_router(v1_convert_router)
 app.include_router(v1_ocr_router)
 app.include_router(v1_ai_router)
+app.include_router(v1_workflows_router)
 
 
 @app.get("/health", tags=["System"])
