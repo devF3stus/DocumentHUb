@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.v1.ai import router as v1_ai_router
 from app.api.v1.convert import router as v1_convert_router
 from app.api.v1.ocr import router as v1_ocr_router
 from app.api.v1.pdf import router as v1_pdf_router
@@ -26,6 +27,7 @@ app.include_router(v1_uploads_router)
 app.include_router(v1_pdf_router)
 app.include_router(v1_convert_router)
 app.include_router(v1_ocr_router)
+app.include_router(v1_ai_router)
 
 
 @app.get("/health", tags=["System"])
