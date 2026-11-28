@@ -5,6 +5,7 @@ import { AiAssistantWorkspace } from "@/components/AiAssistantWorkspace";
 import { ConversionWorkspace } from "@/components/ConversionWorkspace";
 import { OcrWorkspace } from "@/components/OcrWorkspace";
 import { PdfWorkspace } from "@/components/PdfWorkspace";
+import { SmartWorkflowWorkspace } from "@/components/SmartWorkflowWorkspace";
 import { getSupabaseBrowserClient } from "@/lib/supabase";
 
 interface HealthResponse {
@@ -131,7 +132,7 @@ export default function Home() {
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-sky-400">
-              Phase 6: Independent AI Assistant
+              Phase 7: Smart Document Workflows
             </p>
             <h1 className="text-3xl font-bold tracking-tight mt-1">
               DocumentHub
@@ -231,6 +232,8 @@ export default function Home() {
         <OcrWorkspace />
 
         <AiAssistantWorkspace />
+
+        <SmartWorkflowWorkspace />
       </div>
     </main>
   );
