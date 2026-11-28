@@ -25,4 +25,4 @@
 
 ## 3. Concepts & Quiz Score
 - **Phase 6 Learning Quiz:** `3 / 4` (understood provider abstraction, prompt injection defense, and AI/core separation; reviewed Pydantic schema validation).
-- **Phase 6 Implementation Quiz:** Pending user submission.
+- **Phase 6 Implementation Quiz:** `1.5 / 3` (understood `ai_factory.py` swappability; reviewed secret/content-free logging and `429` quota status).
