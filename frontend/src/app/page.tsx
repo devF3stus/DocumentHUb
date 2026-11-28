@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState, type ChangeEvent } from "react";
+import { AiAssistantWorkspace } from "@/components/AiAssistantWorkspace";
 import { ConversionWorkspace } from "@/components/ConversionWorkspace";
 import { OcrWorkspace } from "@/components/OcrWorkspace";
 import { PdfWorkspace } from "@/components/PdfWorkspace";
@@ -130,7 +131,7 @@ export default function Home() {
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-sky-400">
-              Phase 5: OCR Studio
+              Phase 6: Independent AI Assistant
             </p>
             <h1 className="text-3xl font-bold tracking-tight mt-1">
               DocumentHub
@@ -228,6 +229,8 @@ export default function Home() {
         <ConversionWorkspace />
 
         <OcrWorkspace />
+
+        <AiAssistantWorkspace />
       </div>
     </main>
   );

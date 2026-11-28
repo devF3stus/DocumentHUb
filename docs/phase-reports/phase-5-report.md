@@ -32,4 +32,4 @@
 
 ## 5. Concepts & Quiz Score
 - **Phase 5 Learning Quiz:** Walked through all 4 answers together.
-- **Phase 5 Implementation Quiz:** Pending user submission.
+- **Phase 5 Implementation Quiz:** `1 / 3` (understood `503` Tesseract fallback; reviewed language allowlist injection defense and `.tiff`/`.tif` magic bytes).
